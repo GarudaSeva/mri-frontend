@@ -9,7 +9,7 @@ export interface DiagnosisRecord {
   id: string;
   userId: string;
   organType: "brain" | "breast";
-  imagePath: string;
+  imagePath: string; // Base64 or URL
   diseaseName: string;
   confidence: number;
   causes: string[];
@@ -20,43 +20,45 @@ export interface DiagnosisRecord {
   timestamp: string;
 }
 
-const USERS_KEY = "mediscan_users";
+const API_URL = "http://localhost:5001";
 const CURRENT_USER_KEY = "mediscan_current_user";
-const DIAGNOSES_KEY = "mediscan_diagnoses";
 
-function getUsers(): User[] {
-  return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+// Helper to keep user logged in on refresh
+export function getCurrentUser(): User | null {
+  const data = localStorage.getItem(CURRENT_USER_KEY);
+  return data ? JSON.parse(data) : null;
 }
 
-function saveDiagnoses(diagnoses: DiagnosisRecord[]) {
-  localStorage.setItem(DIAGNOSES_KEY, JSON.stringify(diagnoses));
-}
+export async function signup(fullName: string, email: string, password: string): Promise<User> {
+  const res = await fetch(`${API_URL}/signup`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fullName, email, password }),
+  });
 
-export function signup(fullName: string, email: string, password: string): User {
-  const users = getUsers();
-  if (users.find((u) => u.email === email)) {
-    throw new Error("Email already registered");
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Signup failed");
   }
-  const user: User = {
-    id: crypto.randomUUID(),
-    fullName,
-    email,
-    joinedDate: new Date().toISOString(),
-  };
-  users.push(user);
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  // Store password hash (simplified)
-  localStorage.setItem(`mediscan_pw_${email}`, password);
+
+  const user = await res.json();
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
   return user;
 }
 
-export function login(email: string, password: string): User {
-  const users = getUsers();
-  const user = users.find((u) => u.email === email);
-  if (!user) throw new Error("User not found");
-  const storedPw = localStorage.getItem(`mediscan_pw_${email}`);
-  if (storedPw !== password) throw new Error("Invalid password");
+export async function login(email: string, password: string): Promise<User> {
+  const res = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Login failed");
+  }
+
+  const user = await res.json();
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
   return user;
 }
@@ -65,18 +67,16 @@ export function logout() {
   localStorage.removeItem(CURRENT_USER_KEY);
 }
 
-export function getCurrentUser(): User | null {
-  const data = localStorage.getItem(CURRENT_USER_KEY);
-  return data ? JSON.parse(data) : null;
+export async function getDiagnoses(userId: string): Promise<DiagnosisRecord[]> {
+  const res = await fetch(`${API_URL}/get_diagnoses/${userId}`);
+  if (!res.ok) return [];
+  return await res.json();
 }
 
-export function getDiagnoses(userId: string): DiagnosisRecord[] {
-  const all: DiagnosisRecord[] = JSON.parse(localStorage.getItem(DIAGNOSES_KEY) || "[]");
-  return all.filter((d) => d.userId === userId).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-}
-
-export function saveDiagnosis(record: DiagnosisRecord) {
-  const all: DiagnosisRecord[] = JSON.parse(localStorage.getItem(DIAGNOSES_KEY) || "[]");
-  all.push(record);
-  saveDiagnoses(all);
+export async function saveDiagnosis(record: DiagnosisRecord): Promise<void> {
+  await fetch(`${API_URL}/save_diagnosis`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(record),
+  });
 }

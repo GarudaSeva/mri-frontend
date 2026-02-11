@@ -21,12 +21,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const u = authLogin(email, password);
+    const u = await authLogin(email, password);
     setUser(u);
   };
 
   const signup = async (fullName: string, email: string, password: string) => {
-    const u = authSignup(fullName, email, password);
+    const u = await authSignup(fullName, email, password);
     setUser(u);
   };
 

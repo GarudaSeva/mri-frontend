@@ -218,7 +218,37 @@ const breastDiseases: DiagnosisInfo[] = [
   },
 ];
 
-export function getMockDiagnosis(organType: "brain" | "breast"): DiagnosisInfo {
+export function getDiseaseDetails(organType: "brain" | "breast", label: string): DiagnosisInfo {
   const diseases = organType === "brain" ? brainDiseases : breastDiseases;
-  return diseases[Math.floor(Math.random() * diseases.length)];
+
+  // Simple fuzzy matching or direct mapping
+  const lowerLabel = label.toLowerCase();
+
+  if (organType === "brain") {
+    if (lowerLabel.includes("glioma")) return diseases.find(d => d.diseaseName.includes("Glioma")) || diseases[0];
+    if (lowerLabel.includes("meningioma")) return diseases.find(d => d.diseaseName.includes("Meningioma")) || diseases[1];
+    if (lowerLabel.includes("pituitary")) return diseases.find(d => d.diseaseName.includes("Pituitary")) || diseases[2];
+    if (lowerLabel.includes("no tumor")) {
+      return {
+        diseaseName: "No Tumor Detected",
+        confidence: 0,
+        causes: ["N/A"],
+        precautions: ["Maintain healthy lifestyle", "Regular checkups"],
+        remedies: ["N/A"],
+        foodHabits: ["Balanced diet"],
+        medicines: ["N/A"]
+      };
+    }
+  }
+
+  if (organType === "breast") {
+    if (lowerLabel.includes("benign")) return diseases.find(d => d.diseaseName.includes("Benign")) || diseases[1];
+    if (lowerLabel.includes("malignant") || lowerLabel.includes("cancer")) return diseases.find(d => d.diseaseName.includes("Invasive")) || diseases[0];
+  }
+
+  // Default fallback if no match
+  return {
+    ...diseases[0],
+    diseaseName: label // Use the label from API if we can't match rich data
+  };
 }
