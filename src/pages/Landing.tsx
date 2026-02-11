@@ -60,7 +60,7 @@ export default function Landing() {
       <section id="features" className="container py-10">
         <div className="mx-auto max-w-2xl text-center">
           <Badge variant="outline" className="mb-3">Features</Badge>
-          <h2 className="font-serif text-3xl font-bold md:text-4xl">Why Choose MediScan AI?</h2>
+          <h2 className="font-serif text-3xl font-bold md:text-4xl">Why Choose MRI Scan AI?</h2>
           <p className="mt-3 text-muted-foreground">
             Combining cutting-edge deep learning with medical expertise to bring you reliable, fast, and secure diagnostics.
           </p>

@@ -21,7 +21,7 @@ export interface DiagnosisRecord {
 }
 
 const API_URL = "http://localhost:5001";
-const CURRENT_USER_KEY = "mediscan_current_user";
+const CURRENT_USER_KEY = "mriscan_current_user";
 
 // Helper to keep user logged in on refresh
 export function getCurrentUser(): User | null {

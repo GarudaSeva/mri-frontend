@@ -46,7 +46,7 @@ export default function Signup() {
             <Brain className="h-6 w-6 text-primary" />
           </div>
           <CardTitle className="font-serif text-2xl">Create Account</CardTitle>
-          <CardDescription>Join MediScan AI for intelligent diagnostics</CardDescription>
+          <CardDescription>Join MRI Scan AI for intelligent diagnostics</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

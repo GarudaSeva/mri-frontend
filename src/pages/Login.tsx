@@ -36,7 +36,7 @@ export default function Login() {
             <Brain className="h-6 w-6 text-primary" />
           </div>
           <CardTitle className="font-serif text-2xl">Welcome Back</CardTitle>
-          <CardDescription>Sign in to MediScan AI</CardDescription>
+          <CardDescription>Sign in to MRI Scan AI</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
