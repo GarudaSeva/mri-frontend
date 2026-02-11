@@ -17,7 +17,7 @@ export function Navbar() {
   return (
     <header className="border-b bg-card">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-serif text-xl font-bold text-primary">
+        <Link to="/dashboard" className="flex items-center gap-2 font-serif text-xl font-bold text-primary">
           <Brain className="h-6 w-6" />
           MediScan AI
         </Link>

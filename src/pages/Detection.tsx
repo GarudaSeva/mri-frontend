@@ -75,7 +75,7 @@ export default function Detection() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="container py-8">
-        <Button variant="ghost" className="mb-4" onClick={() => navigate("/")}>
+        <Button variant="ghost" className="mb-4" onClick={() => navigate("/dashboard")}>
           <ChevronLeft className="mr-1 h-4 w-4" /> Back to Home
         </Button>
 
