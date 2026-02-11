@@ -30,7 +30,7 @@ export default function Signup() {
     setLoading(true);
     try {
       await signup(fullName, email, password);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       toast.error(err.message || "Signup failed");
     } finally {
