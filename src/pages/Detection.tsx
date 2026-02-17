@@ -63,8 +63,12 @@ export default function Detection() {
         setProgress((prev) => (prev >= 90 ? 90 : prev + 10));
       }, 500);
 
+      const token = localStorage.getItem("mriscan_token");
       const response = await fetch(`http://localhost:5001/${organType}`, {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
         body: formData,
       });
 

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Heart, Upload, Cpu, FileText, Shield, ArrowRight, CheckCircle2, Users, Zap, Clock, ChevronRight } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import heroImage from "@/assets/hero-medical.jpg";
 import doctorImage from "@/assets/doctor-ai.jpg";
 import brainImage from "@/assets/brain-scan.jpg";
@@ -23,6 +24,9 @@ const features = [
 
 
 export default function Landing() {
+  const { user } = useAuth();
+  const detectionPath = user ? "/dashboard" : "/signup";
+
   return (
     <div className="min-h-screen bg-background">
 
@@ -46,7 +50,9 @@ export default function Landing() {
             </p>
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Button size="lg" asChild>
-                <Link to="/signup">Start Free Diagnosis <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link to={detectionPath}>
+                  {user ? "Go to Dashboard" : "Start Free Diagnosis"} <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <a href="#how-it-works">See How It Works</a>
@@ -200,7 +206,9 @@ export default function Landing() {
                 ))}
               </div>
               <Button className="w-full mt-8 h-12 rounded-full text-lg shadow-lg group-hover:scale-[1.02] transition-transform bg-primary" asChild>
-                <Link to="/signup">Start Detection <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                <Link to={user ? "/detect/brain" : "/signup"}>
+                  {user ? "Start Detection" : "Sign Up to Start"} <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </Card>
@@ -231,7 +239,9 @@ export default function Landing() {
                 ))}
               </div>
               <Button className="w-full mt-8 h-12 rounded-full text-lg shadow-lg group-hover:scale-[1.02] transition-transform bg-pink-600 hover:bg-pink-700 text-white border-0" asChild>
-                <Link to="/signup">Start Detection <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                <Link to={user ? "/detect/breast" : "/signup"}>
+                  {user ? "Start Detection" : "Sign Up to Start"} <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </Card>
@@ -247,7 +257,9 @@ export default function Landing() {
             No credit card required.
           </p>
           <Button size="lg" className="mt-10 h-14 px-10 rounded-full text-lg shadow-xl" asChild>
-            <Link to="/signup">Create Free Account <ArrowRight className="ml-2 h-5 w-5" /></Link>
+            <Link to={detectionPath}>
+              {user ? "Go to Dashboard" : "Create Free Account"} <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
       </section>
